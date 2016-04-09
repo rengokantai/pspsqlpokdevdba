@@ -56,4 +56,28 @@ import
 ```
 psql yd < yd.sql
 ```
-
+######backup
+```
+pg_dump -d yd | gzip > yd.gz //Or
+pg_dump -Fc yd >yd.bk
+pg_restore -d yd yd.bk
+```
+######simple cron
+```
+cd
+mkdir backup
+mkdir original
+mv yd.sql original
+rm yd.bk
+crontab -e 
+```
+edit
+```
+0 0 * * * yd pg_dump -Fc yd > backup/yd.bk
+```
+#####Understanding 
+######using pgbench
+```
+createdb bench
+pgbench -i bench
+```
