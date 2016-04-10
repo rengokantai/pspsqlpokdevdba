@@ -157,6 +157,11 @@ select pg_stat_reset();
 ```
 select sum(heap_blks_read) as hbr, sum(heap_blks_hit)as hh, sum(heap_blks_hit)/(sum(heap_blks_hit)+sum(heap_blks_read))as ratio from pg_statio_user_tables;
 ```
+#####Fixing slow query
+######condition indexes
+```
+create index concurently idx_name on tbname(id) where colname >10;
+```
 #####optimize
 ######
 low query
