@@ -157,3 +157,27 @@ select pg_stat_reset();
 ```
 select sum(heap_blks_read) as hbr, sum(heap_blks_hit)as hh, sum(heap_blks_hit)/(sum(heap_blks_hit)+sum(heap_blks_read))as ratio from pg_statio_user_tables;
 ```
+#####optimize
+######
+low query
+```
+explain select * from posts where bd like '%re%';
+explain analyze select * from posts where bd like '%re%';
+```
+then creat index
+```
+create index idx_tbname on tbname(bd text_pattern_ops)
+```
+using full text search
+```
+select * from tbname where to_tsvector(col) @@ to_tsquery('query')
+```
+optimize
+```
+alter table tbname add column search tsvector
+```
+```
+update tbname set search = to_tsvector(col)
+create index concurrently idx_search_col on tbname using GIST (search)
+select * from tbname where search @@ to_tsquery('query')
+```
